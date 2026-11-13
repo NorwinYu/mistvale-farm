@@ -8,6 +8,7 @@
 [![Three.js](https://img.shields.io/badge/Three.js-r169-2b3a2b.svg)](https://threejs.org/)
 [![Vite](https://img.shields.io/badge/Vite-5.4-596b52.svg)](https://vitejs.dev/)
 [![No external assets](https://img.shields.io/badge/assets-100%25%20procedural-b08a55.svg)](#隐私与素材)
+[![Deploy Pages](https://github.com/NorwinYu/mistvale-farm/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/NorwinYu/mistvale-farm/actions/workflows/deploy-pages.yml)
 
 <img src="docs/screenshots/title.webp" alt="雾谷农庄标题界面：黄昏中的山谷农庄" width="1280" />
 
@@ -39,6 +40,8 @@
 - **写实光影与手作质感**：程序化 PBR 材质、低角度暖阳、ACES 色调映射、柔光与长阴影；桌面端与触屏均有完整操作界面。
 
 ## 快速开始
+
+**在线游玩：** <https://norwinyu.github.io/mistvale-farm/>
 
 需要 **Node.js 18+** 与支持 **WebGL 2** 的现代浏览器。
 
