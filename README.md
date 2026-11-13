@@ -4,6 +4,7 @@
 
 **一款可以直接在浏览器里游玩的写实光影 3D 农场生活游戏。**
 
+[![Play online](https://img.shields.io/badge/play-online-d9b97d.svg)](https://norwinyu.github.io/mistvale-farm/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-d9b97d.svg)](LICENSE)
 [![Three.js](https://img.shields.io/badge/Three.js-r169-2b3a2b.svg)](https://threejs.org/)
 [![Vite](https://img.shields.io/badge/Vite-5.4-596b52.svg)](https://vitejs.dev/)
