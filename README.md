@@ -133,6 +133,8 @@ npm run preview
 | `npm run build` | 生成生产构建到 `dist/` |
 | `npm run preview` | 本地预览生产构建（端口 4178） |
 
+`main` 分支更新后，GitHub Actions 会自动构建并发布到 GitHub Pages；静态资源使用相对路径，因此同时兼容本地预览与 `username.github.io/mistvale-farm/`。
+
 ## 隐私与素材
 
 - 本仓库**不包含个人信息、私人照片或任何用户数据**。`docs/screenshots/` 中仅为游戏界面的产品截图，没有系统桌面、路径、账号或其他隐私信息。
