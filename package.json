@@ -1,0 +1,31 @@
+{
+  "name": "mistvale-farm",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A cozy realistic-lighting 3D farm life game that runs in the browser.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "threejs",
+    "webgl",
+    "farm-game",
+    "cozy-game",
+    "3d",
+    "procedural-generation",
+    "vite"
+  ],
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 5178 --strictPort",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 4178 --strictPort"
+  },
+  "dependencies": {
+    "three": "0.169.0"
+  },
+  "devDependencies": {
+    "vite": "5.4.11"
+  }
+}

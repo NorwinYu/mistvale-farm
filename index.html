@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#172017" />
+  <meta name="color-scheme" content="dark light" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23172017'/%3E%3Cpath d='M32 53V25M32 35c-10 0-16-6-16-15 10 0 16 6 16 15Zm0-10c8 0 13-5 13-12-8 0-13 5-13 12Z' fill='none' stroke='%23d9b97d' stroke-width='2'/%3E%3C/svg%3E" />
+  <title>雾谷农庄 · Mistvale Farm</title>
+  <meta name="description" content="雾谷农庄是一段写实光影风格的 3D 农场生活：漫步山谷，开垦、播种、收获，在缓慢的时光里打理自己的农庄。" />
+  <meta property="og:title" content="雾谷农庄 · Mistvale Farm" />
+  <meta property="og:description" content="一款可直接在浏览器中游玩的写实光影 3D 农场生活游戏。开垦、播种、收获，把日子种成一片田野。" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+</head>
+<body>
+<noscript><div style="padding:24px;color:#f1eadb;background:#172017;font-family:serif">请启用 JavaScript，才能进入雾谷农庄。</div></noscript>
+<div id="app">
+  <div id="stage" aria-hidden="true"></div>
+  <div id="grade" aria-hidden="true"></div>
+  <div id="grain" aria-hidden="true"></div>
+
+  <div id="loading" class="loading-screen">
+    <div class="loading-inner">
+      <div class="brand-mark">
+        <span class="mark-line"></span>
+        <svg viewBox="0 0 48 48" aria-hidden="true">
+          <path d="M24 43V20M24 28c-8 0-13-5-13-12 8 0 13 5 13 12Zm0-8c7 0 11-4 11-10-7 0-11 4-11 10Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="mark-line"></span>
+      </div>
+      <div class="loading-title">雾谷农庄</div>
+      <div class="loading-en">MISTVALE FARM</div>
+      <div class="loading-track"><i id="loading-fill"></i></div>
+      <div class="loading-note" id="loading-note">正在解开山谷的晨雾…</div>
+    </div>
+  </div>
+
+  <section id="title-screen" class="title-screen hidden" aria-label="雾谷农庄标题界面">
+    <div class="title-shade"></div>
+    <div class="title-inner">
+      <div class="brand-kicker">
+        <span class="kicker-rule"></span>
+        <span>A SLOW-LIVING FARM SIMULATION</span>
+      </div>
+      <h1 class="game-title"><span>雾谷</span><em>农庄</em></h1>
+      <div class="game-title-en">MISTVALE FARM</div>
+      <p class="title-lead">在风经过的山谷里，<br>把日子种成一片田野。</p>
+      <div class="title-actions">
+        <button class="btn btn-primary" id="btn-start">
+          <span class="btn-label"><span>开始新生活</span><small>BEGIN A NEW LIFE</small></span>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15M14 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="btn btn-ghost" id="btn-continue">继续农庄 <span class="btn-arrow">↗</span></button>
+      </div>
+      <div class="title-meta">
+        <span>写实 3D 农场生活</span><span class="meta-dot">·</span><span>独自经营</span><span class="meta-dot">·</span><span>自动存档</span>
+      </div>
+    </div>
+
+    <aside class="title-quote">
+      <span class="quote-index">FIELD NOTE&nbsp; 01</span>
+      <p>「土地不催促任何人。<br>它只是安静地，等你回来。」</p>
+    </aside>
+
+    <div class="title-footer">
+      <div class="title-controls">
+        <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 漫步</span>
+        <span><i class="mouse-icon"></i>拖动环顾</span>
+        <span><kbd>E</kbd> 互动</span>
+      </div>
+      <span class="title-credit">VALLEY OF MIST &amp; GRAIN · 2026</span>
+    </div>
+  </section>
+
+  <main id="hud" class="hidden" aria-label="农场界面">
+    <header class="hud-header">
+      <div class="date-panel glass">
+        <div class="clock-ring" id="clock-ring">
+          <svg viewBox="0 0 72 72" aria-hidden="true">
+            <circle cx="36" cy="36" r="31" class="clock-track"/>
+            <circle cx="36" cy="36" r="31" class="clock-progress" id="clock-progress"/>
+          </svg>
+          <span id="clock-digits">17:20</span>
+        </div>
+        <div class="date-copy">
+          <span class="eyebrow" id="season-day">春 · 第 1 日</span>
+          <div class="weather-line">
+            <span id="weather-icon" class="weather-icon"></span>
+            <strong id="weather-label">晴朗</strong>
+            <span class="weather-temp" id="weather-temp">18°</span>
+          </div>
+          <span class="place-line">雾谷农庄 · 微风谷</span>
+        </div>
+      </div>
+
+      <div class="quest-panel glass" id="quest-panel">
+        <div class="panel-heading">
+          <span class="panel-title">农庄手记</span>
+          <span class="panel-index" id="quest-index">01</span>
+        </div>
+        <h2 id="quest-name">初来乍到</h2>
+        <ul class="quest-list" id="quest-list"></ul>
+        <div class="quest-foot"><span>完成奖励</span><strong id="quest-reward">+120 G</strong></div>
+      </div>
+    </header>
+
+    <div class="hud-stats">
+      <div class="wallet glass">
+        <span class="coin-sign" aria-hidden="true">G</span>
+        <span class="wallet-value" id="money">420</span>
+        <span class="wallet-label">金币</span>
+      </div>
+      <div class="vitals glass">
+        <div class="vital-head"><span>体力</span><span id="energy-text">100 / 100</span></div>
+        <div class="meter"><i id="energy-fill"></i></div>
+        <div class="water-line">
+          <span class="water-drop" aria-hidden="true"></span>
+          <span>洒水壶</span><span id="water-text">14 / 14</span>
+        </div>
+      </div>
+      <div class="corner-buttons">
+        <button class="icon-btn" id="btn-audio" aria-label="开关声音" title="声音 (M)">
+          <svg class="icon-sound-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm12-1.5a6 6 0 0 1 0 9M18.5 4a11 11 0 0 1 0 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="icon-btn" id="btn-help" aria-label="操作说明" title="农庄指南 (?)">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.4" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M9.4 9.2a2.7 2.7 0 0 1 5.2.9c0 1.8-2.6 2.1-2.6 4" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="12" cy="17.1" r=".8" fill="currentColor"/></svg>
+        </button>
+        <button class="icon-btn" id="btn-journal" aria-label="农庄手记/背包" title="背包与图鉴 (B)">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.2 4.5h11.3a2 2 0 0 1 2 2v13H7.2a2 2 0 0 1-2-2v-13Z" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M9 4.5v15M12.2 9h3M12.2 12h3" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="toast-stack" id="toasts" aria-live="polite"></div>
+
+    <div class="target-chip hidden" id="target-chip">
+      <span class="crop-swatch" id="target-swatch"></span>
+      <div><strong id="target-name">胡萝卜</strong><span id="target-stage">第 2 生长阶段 · 已浇水</span></div>
+    </div>
+
+    <div class="interaction-prompt hidden" id="interaction-prompt">
+      <span class="prompt-key">E</span>
+      <span id="prompt-text">开垦土地</span>
+      <span class="prompt-hint" id="prompt-hint">锄头</span>
+    </div>
+
+    <div class="hint-bar" id="hint-bar">
+      <span class="hint-grain" aria-hidden="true"></span>
+      <span id="hint-text">走到菜圃旁，用锄头翻一块土。</span>
+    </div>
+
+    <div class="hotbar-wrap">
+      <div class="seed-popover hidden" id="seed-popover">
+        <div class="popover-head">
+          <span>选择种子</span><span class="popover-key">Q 切换</span>
+        </div>
+        <div class="seed-options" id="seed-options"></div>
+      </div>
+      <div class="hotbar glass" role="toolbar" aria-label="农具">
+        <button class="tool-slot" data-tool="hoe" aria-label="锄头">
+          <span class="slot-num">1</span>
+          <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M21 5.5 13.2 20.2M8.8 8.7l7 3.4-2.2 4.5-7-3.5 2.2-4.4Zm-1.7 1.1L6 20.4l9.2 4.4 1.1-2.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="slot-name">锄头</span>
+        </button>
+        <button class="tool-slot" data-tool="can" aria-label="洒水壶">
+          <span class="slot-num">2</span>
+          <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M9 13h11v13H9V13Zm2-4h7l2 4H9l2-4Zm9 4 5-4m-1 1 3 2m-15 7h9M9 13 6 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="slot-name">水壶</span>
+        </button>
+        <button class="tool-slot" data-tool="seeds" aria-label="种子袋">
+          <span class="slot-num">3</span>
+          <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M12 8h8l2.5 5.2-2 12H11.5l-2-12L12 8Zm4 1v-3m-5 2c1.8-2 8.2-2 10 0M14 17h4m-4 3.5h4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="slot-name" id="seed-slot-name">种子</span>
+        </button>
+        <button class="tool-slot" data-tool="sickle" aria-label="镰刀">
+          <span class="slot-num">4</span>
+          <svg viewBox="0 0 32 32" aria-hidden="true"><path d="m19 7 5 5-9 12-5-5L19 7Zm-4.6 11.3 4.2 4.2M17 25.5h9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="slot-name">收获</span>
+        </button>
+        <div class="hotbar-divider"></div>
+        <div class="seed-readout">
+          <span class="readout-label">当前种子</span>
+          <button id="seed-switch" class="seed-switch"><span id="seed-current-name">胡萝卜</span><i id="seed-current-count">×8</i><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.2"/></svg></button>
+          <span class="readout-hint">Q 切换 · 3 播种</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-help">
+      <span><kbd>B</kbd> 背包</span>
+      <span><kbd>H</kbd> 拍照模式</span>
+      <span><kbd>Esc</kbd> 关闭面板</span>
+    </div>
+
+    <div class="touch-ui" id="touch-ui">
+      <div class="joystick" id="joystick" aria-label="移动摇杆">
+        <span class="joystick-ring"></span>
+        <span class="joystick-thumb" id="joystick-thumb"></span>
+      </div>
+      <button class="touch-action" id="touch-action" aria-label="互动">
+        <span>E</span>
+        <small>互动</small>
+      </button>
+    </div>
+
+    <div class="photo-badge hidden" id="photo-badge">拍照模式 · H 返回</div>
+  </main>
+
+  <div id="modal-root" class="modal-root hidden" role="dialog" aria-modal="true">
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-card" id="modal-card"></div>
+  </div>
+
+  <div id="day-transition" class="day-transition hidden" aria-live="polite">
+    <div class="night-stars" aria-hidden="true"></div>
+    <div class="day-transition-inner">
+      <span class="eyebrow" id="transition-kicker">春 · 第 2 日</span>
+      <div class="transition-title" id="transition-day">新的一天</div>
+      <p id="transition-note">昨夜的雨水替你浇灌了菜圃。</p>
+      <div class="transition-line"></div>
+      <button class="btn btn-ghost transition-continue hidden" id="transition-continue">走进清晨</button>
+    </div>
+  </div>
+
+  <div id="fatal-error" class="fatal-error hidden">
+    <strong>无法启动 3D 场景</strong>
+    <p>请使用支持 WebGL2 的现代浏览器打开，并确认硬件加速已开启。</p>
+  </div>
+</div>
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>
